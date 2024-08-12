@@ -1,9 +1,11 @@
 package io.github.Hazarinn.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.github.Hazarinn.domain.enums.Perfil;
 
 import javax.persistence.Entity;
-import javax.persistence.ManyToMany;
+
+import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,8 @@ public class Cliente extends Pessoa implements Serializable {
     private static final long serialVersionUID = 1L;
 
 
-    @ManyToMany(mappedBy = "cliente")
+    @JsonIgnore
+    @OneToMany(mappedBy = "cliente")
     private List<Chamado> chamados = new ArrayList<>();
 
     public Cliente() {
