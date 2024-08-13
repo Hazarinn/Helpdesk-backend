@@ -12,6 +12,7 @@ import io.github.Hazarinn.repositories.PessoaRepository;
 import io.github.Hazarinn.services.exceptions.DataIntegrityViolationException;
 import io.github.Hazarinn.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +26,9 @@ public class ClienteService {
 
     @Autowired
     private PessoaRepository pessoaRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     public Cliente findById(Integer id){
         Optional<Cliente> obj = repository.findById(id);
@@ -41,6 +45,7 @@ public class ClienteService {
     //Pois o que é pesistido no banco é a entidade e não o DTO
     public Cliente create(ClienteDTO objDTO) {
         objDTO.setId(null);
+        objDTO.setSenha(encoder.encode(objDTO.getSenha()));
         validaPorCpfEemail(objDTO);
         Cliente newObj = new Cliente(objDTO);
     return repository.save(newObj);
