@@ -5,6 +5,7 @@ import io.github.Hazarinn.domain.Tecnico;
 import io.github.Hazarinn.domain.enums.Perfil;
 
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -16,9 +17,17 @@ public class TecnicoDTO implements Serializable {
 
 
     protected Integer id;
+
+    @NotNull(message = "O campo NOME é requerido")
     protected String nome;
+
+    @NotNull(message = "O campo CPF é requerido")
     protected String cpf;
+
+    @NotNull(message = "O campo EMAIL é requerido")
     protected String email;
+
+    @NotNull(message = "O campo SENHA é requerido")
     protected String senha;
     protected Set<Integer> perfis = new HashSet<>();
 
