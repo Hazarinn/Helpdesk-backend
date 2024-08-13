@@ -10,7 +10,10 @@ import io.github.Hazarinn.repositories.ChamadoRepository;
 import io.github.Hazarinn.services.exceptions.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.yaml.snakeyaml.events.Event;
 
+import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +43,16 @@ public class ChamadoService {
 
     }
 
+    public Chamado update(Integer id, @Valid ChamadoDTO objDTO) {
+        objDTO.setId(id);
+        Chamado oldObj = findById(id);
+        oldObj = newChamado(objDTO);
+        return repository.save(oldObj);
+
+
+
+    }
+
     private Chamado newChamado(ChamadoDTO obj) {
 
         Tecnico tecnico = tecnicoService.findById(obj.getTecnico());
@@ -47,6 +60,10 @@ public class ChamadoService {
         Chamado chamado = new Chamado();
         if (obj.getId() != null){
             chamado.setId(obj.getId());
+        }
+
+        if(obj.getStatus().equals(2)){
+            chamado.setDataFechamento(LocalDate.now());
         }
 
         chamado.setTecnico(tecnico);
@@ -59,4 +76,6 @@ public class ChamadoService {
 
 
     }
+
+
 }
