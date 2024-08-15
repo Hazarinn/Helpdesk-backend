@@ -2,11 +2,13 @@ package io.github.Hazarinn.config;
 
 
 import io.github.Hazarinn.security.JWTAuthenticatorFilter;
+import io.github.Hazarinn.security.JWTAuthorizarionFilter;
 import io.github.Hazarinn.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -20,6 +22,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
@@ -44,7 +47,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         }
         http.cors().and().csrf().disable();
-        http.addFilter(new JWTAuthenticatorFilter(authenticationManager(), jwtUtil));
+        http.addFilter(new JWTAuthenticatorFilter(authenticationManager(), jwtUtil, userDetailsService));
+        http.addFilter(new JWTAuthorizarionFilter(authenticationManager(), jwtUtil, userDetailsService));
         http.authorizeRequests()
                         .antMatchers(PUBLIC_MATCHERS).permitAll()
                         .anyRequest().authenticated();

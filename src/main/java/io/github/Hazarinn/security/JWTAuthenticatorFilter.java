@@ -6,6 +6,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -21,7 +22,7 @@ public class JWTAuthenticatorFilter extends UsernamePasswordAuthenticationFilter
 
     private JWTUtil jwtUtil;
 
-    public JWTAuthenticatorFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil) {
+    public JWTAuthenticatorFilter(AuthenticationManager authenticationManager, JWTUtil jwtUtil, UserDetailsService userDetailsService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
     }
