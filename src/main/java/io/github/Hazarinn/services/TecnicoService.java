@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,12 +50,16 @@ public class TecnicoService {
 
     }
 
-    public Tecnico update(Integer id, TecnicoDTO objDTO) {
+    public Tecnico update(Integer id, @Valid TecnicoDTO objDTO) {
         objDTO.setId(id);
-        Tecnico obj = findById(id);
+        Tecnico oldObj = findById(id);
+        objDTO.setSenha(encoder.encode(objDTO.getSenha()));
+        if(!objDTO.getSenha().equals(oldObj.getSenha())){
+
+        }
         validaPorCpfEemail(objDTO);
-        obj = new Tecnico(objDTO);
-        return repository.save(obj);
+        oldObj = new Tecnico(objDTO);
+        return repository.save(oldObj);
     }
 
     private void validaPorCpfEemail(TecnicoDTO objDTO) {

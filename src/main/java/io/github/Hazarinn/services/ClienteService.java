@@ -46,6 +46,7 @@ public class ClienteService {
     public Cliente create(ClienteDTO objDTO) {
         objDTO.setId(null);
         objDTO.setSenha(encoder.encode(objDTO.getSenha()));
+
         validaPorCpfEemail(objDTO);
         Cliente newObj = new Cliente(objDTO);
     return repository.save(newObj);
@@ -54,10 +55,15 @@ public class ClienteService {
 
     public Cliente update(Integer id, ClienteDTO objDTO) {
         objDTO.setId(id);
-        Cliente obj = findById(id);
+        Cliente oldObj = findById(id);
+
+        objDTO.setSenha(encoder.encode(objDTO.getSenha()));
+        if(!objDTO.getSenha().equals(oldObj.getSenha())){
+
+        }
         validaPorCpfEemail(objDTO);
-        obj = new Cliente(objDTO);
-        return repository.save(obj);
+        oldObj = new Cliente(objDTO);
+        return repository.save(oldObj);
     }
 
     private void validaPorCpfEemail(ClienteDTO objDTO) {
